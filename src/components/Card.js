@@ -318,60 +318,74 @@ function Card(props) {
     // Functions Tamanho
 
     function dataStatusTamanho(dados){
-        sleep(1000).then(() => {
-        let dataRecente = new Date("2000-01-01");
-        let nRecente;
-        for (let n in dados){
-            let dataRaw = dados[n]["data"].slice(0,10)
-            let ano = dataRaw.split("-")[0]
-            let mes = String(parseInt(dataRaw.split("-")[1])-1)
-            let dia = dataRaw.split("-")[2]
-            let dataMid = new Date(ano, mes, dia)
-            console.log(dataMid)
-            if (dataMid > dataRecente) {
-                dataRecente = dataMid
-                nRecente = n
-            }
-        }
-
-        
-
-        setDataTamanho(dataRecente)
-        //console.log(dataRecente)
-
-        let dicSomaTamanhos = {};
-        let dicQuantTamanhos = {};
-        let dicAtuais = {};
-
-        for (let n in dados) {
-            let dataRaw = dados[n]["data"].slice(0,10)
-            let ano = dataRaw.split("-")[0]
-            let mes = String(parseInt(dataRaw.split("-")[1])-1)
-            let dia = dataRaw.split("-")[2]
-            let pov = dados[n]["pov"]
-
-            if (ano != dataRecente.getFullYear() || mes != dataRecente.getMonth() || dia != dataRecente.getDate()){
-
-                if (dicSomaTamanhos.hasOwnProperty(pov)) {
-                    dicSomaTamanhos[pov] += dados[n]["mb"];
-                    dicQuantTamanhos[pov] += 1;
-                } else {
-                    dicSomaTamanhos[pov] = dados[n]["mb"];
-                    dicQuantTamanhos[pov] = 1;
+        if (dados.length > 0){
+            sleep(1000).then(() => {
+            let dataRecente = new Date("2000-01-01");
+            let nRecente;
+            for (let n in dados){
+                let dataRaw = dados[n]["data"].slice(0,10)
+                let ano = dataRaw.split("-")[0]
+                let mes = String(parseInt(dataRaw.split("-")[1])-1)
+                let dia = dataRaw.split("-")[2]
+                let dataMid = new Date(ano, mes, dia)
+                //console.log(dataMid)
+                if (dataMid > dataRecente) {
+                    dataRecente = dataMid
+                    nRecente = n
                 }
-            } else {
-                dicAtuais[pov] = dados[n]["mb"]
             }
-        }
 
-        setDicAtuais(dicAtuais);
-        setDicSoma(dicSomaTamanhos);
-        setDicQuant(dicQuantTamanhos);
-        setBoolTamanho(false)
-        });
+            //console.log(dados);
+
+            setDataTamanho(dataRecente)
+            //console.log(dataRecente)
+
+            let dicSomaTamanhos = {};
+            let dicQuantTamanhos = {};
+            let dicAtuais = {};
+
+            for (let n in dados) {
+                let dataRaw = dados[n]["data"].slice(0,10)
+                let ano = parseInt(dataRaw.split("-")[0])
+                let mes = parseInt(dataRaw.split("-")[1])-1
+                let dia = parseInt(dataRaw.split("-")[2])
+                let poi = dados[n]["poi"]
+
+                //console.log(poi)
+                
+                //console.log(typeof dataRecente.getFullYear())
+                //console.log(typeof ano)
+
+                //console.log(dataRecente.getMonth())
+                //console.log(mes)
+
+                //console.log(dataRecente.getDate())
+                //console.log(dia)
+
+                if (ano.toString() != dataRecente.getFullYear() || mes.toString() != dataRecente.getMonth() || dia.toString() != dataRecente.getDate()){
+                    //console.log("entrou")
+                    if (dicSomaTamanhos.hasOwnProperty(poi)) {
+                        dicSomaTamanhos[poi] += dados[n]["mb"];
+                        dicQuantTamanhos[poi] += 1;
+                    } else {
+                        dicSomaTamanhos[poi] = dados[n]["mb"];
+                        dicQuantTamanhos[poi] = 1;
+                    }
+                } else {
+                    dicAtuais[poi] = dados[n]["mb"]
+                }
+            }
+
+            setDicAtuais(dicAtuais);
+            setDicSoma(dicSomaTamanhos);
+            setDicQuant(dicQuantTamanhos);
+            setBoolTamanho(false)
+            })}
     }
 
     function mediaStatusTamanho(){
+
+        if (dicSoma !== {} && dicQuant) {
 
         let dicMedias = {};
 
@@ -382,12 +396,14 @@ function Card(props) {
         setDicMedias(dicMedias);
         setDicSoma(null);
     }
+    }
 
     function listaFinalTamanhos(){
         for (let u in dicAtuais){
             if (dicAtuais[u] > dicMedias[u]*(1 + VAR_MAX_TAMANHO_FILES) || dicAtuais[u] < dicMedias[u]*(1 - VAR_MAX_TAMANHO_FILES)){
                 listaPOI.push(u)
         }
+        //console.log(listaPOI)
     }}
 
     function txtErrTamanho(){
@@ -432,7 +448,7 @@ function Card(props) {
 
         for (let u in prop_){
             if (prop_[u]["status"] === "desligado"){
-                listCheckPush(prop_[u]["pov"])
+                listCheckPush(prop_[u]["poi"])
             }
         }
         
@@ -750,7 +766,7 @@ function Card(props) {
 
                     return (
                         <div style={{height:"10px", padding:"5px"}}>
-                            <text style={{fontSize:"90%"}}>{u["pov"]}</text>
+                            <text style={{fontSize:"90%"}}>{u["poi"]}</text>
                         </div>
                     )}))}
 
