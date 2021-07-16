@@ -407,11 +407,12 @@ function Card(props) {
     }}
 
     function txtErrTamanho(){
-        sleep(1000).then(() => {
-            setErrTamanho(listaPOI.length);
+        sleep(2000).then(() => {
+            
             setBoolErrTamanho(false);
             if (listaPOI.length > 0){
-            setBoolShowErrTamanho(true);}
+                setErrTamanho(listaPOI.length);
+                setBoolShowErrTamanho(true);}
         });
     }
 
