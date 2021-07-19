@@ -81,30 +81,32 @@ function App() {
                 console.log(error);
             });
 
-
-
-
-      let url1 = 'https://www.generalshopping.iris8.com.br/api/health/status';
-      let username1 = 'faad25eb8bda40d0bffa519f56ff7b95@iris8.com.br';
-      let password1 = '4fad71be-96ef-4728-abd8-ba5e50763cf9';
-
-      let headers1 = new Headers();
-
-      //headers.append('Content-Type', 'text/json');
-      headers1.set('Authorization', 'Basic ' + base64.encode(username1 + ":" + password1));
-
-      fetch(url1, {method:'GET',
-              headers: headers1,
-              credentials: 'include',
-
+      function doFetch(ev){
+            let uri = "https://www.generalshopping.iris8.com.br/api/health/status";
+            
+            let h = new Headers();
+            h.append('Accept', 'application/json');
+            let encoded = window.btoa('faad25eb8bda40d0bffa519f56ff7b95@iris8.com.br:4fad71be-96ef-4728-abd8-ba5e50763cf9');
+            let auth = 'Basic ' + encoded;
+            h.append('Authorization', auth );
+            
+            let req = new Request(uri, {
+                method: 'GET',
+                headers: h,
+                credentials: 'include'
+            });
+            //credentials: 'same-origin'
+            
+            fetch(req)
+            .then( (response)=>{
+                  console.log(response);
             })
-      .then(response => console.log(response.json()))
-      .then(json => console.log(json))
-      .catch(error => console.log(error));
-      
-      //.done();
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
 
-
+    doFetch()
   }
 
   function filterData (dic, id) {

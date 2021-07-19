@@ -258,6 +258,8 @@ function Card(props) {
 
     function boolCountSwitchHorus(prop_) {
 
+        sleep(1000).then(() => {
+
         function listCheckPush(checkName){
             if (!listBoolCheckHorus.includes(checkName)){
                 let l = listBoolCheckHorus
@@ -293,7 +295,7 @@ function Card(props) {
         if (prop_["queueSize"] > 100){
             listCheckPush("queueSize")
         }
-
+        
         if (nCreated > mediaCreated*(1+VAR_MAX_QUANT_ALTERACOES) || nCreated < mediaCreated*(1-VAR_MAX_QUANT_ALTERACOES)){
             listCheckPush("createdOut")
         }
@@ -305,6 +307,7 @@ function Card(props) {
         if (boolErrHorus){
             txtErrHorus()
         }
+    });
     }
 
     function txtErrHorus(){
@@ -390,7 +393,7 @@ function Card(props) {
         let dicMedias = {};
 
         for (var key in dicSoma){
-            dicMedias[key] = dicSoma[key]/dicQuant[key]
+            dicMedias[key] = Math.round(dicSoma[key]/dicQuant[key])
         }
 
         setDicMedias(dicMedias);
@@ -407,7 +410,7 @@ function Card(props) {
     }}
 
     function txtErrTamanho(){
-        sleep(2000).then(() => {
+        sleep(1000).then(() => {
             
             setBoolErrTamanho(false);
             if (listaPOI.length > 0){
@@ -434,8 +437,6 @@ function Card(props) {
                 <text style={{fontSize:"90%"}}>{texto}</text>
             </div>)
         }
-
-
 
     function boolCountSwitchSight(prop_) {
 
@@ -598,14 +599,14 @@ function Card(props) {
                     <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Workers</text>
                     {textHealthOperation(props.horusHealthStatus["runningWorkers"], props.horusHealthStatus["workerNumber"])}
                     {textHealthSeconds(props.horusHealthStatus["secondsFromLastWorkerHeatBeat"])}
-                    {textHealthReset(props.horusHealthStatus["workerLastReset"])}
+                    {props.horusHealthStatus["workerLastReset"] && (textHealthReset(props.horusHealthStatus["workerLastReset"]))}
                     {textHealthQueue(props.horusHealthStatus["queueSize"])}
                 </div>
                 <div style={{display:"flex", flexDirection:"column", marginLeft:"20px"}}>
                     <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Captures</text>
                     {textHealthOperation(props.horusHealthStatus["runningCaptures"], props.horusHealthStatus["captureNumber"])}
                     {textHealthSeconds(props.horusHealthStatus["secondsFromLastCaptureHeatBeat"])}
-                    {textHealthReset(props.horusHealthStatus["captureLastReset"])}
+                    {props.horusHealthStatus["captureLastReset"] && (textHealthReset(props.horusHealthStatus["captureLastReset"]))}
                 </div>
             </div>
         </div>
@@ -613,13 +614,13 @@ function Card(props) {
         { moduloStatusHorus && (
         <div style={{width:"60%", height:"2px", backgroundColor:"black", opacity:"30%", marginTop:"15px", marginBottom:"15px"}}>
         </div>)}
+        {boolMedia && props.statusFiles.length !== 0 && (geraMediaStatusFiles(props.statusFiles))}
         {props.errStatusFiles && moduloStatusHorus ? (
             erroBanco()
         ):(<div>
         {props.statusFiles && props.statusFiles.length !== 0 && moduloStatusHorus && (
         <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"center", justifyContent:"space-around"}}>
             <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
-                {boolMedia && (geraMediaStatusFiles(props.statusFiles))}
                 {props.statusFiles && props.statusFiles !== "erro" && (boolCountSwitchHorus(props.statusFiles))}
                 {props.statusFiles && props.statusFiles !== "erro" && moduloStatusHorus && (
                     <div style={{display:"flex", flexDirection:"column", width:"100%", marginBottom:"10px"}}>
@@ -668,6 +669,10 @@ function Card(props) {
                     style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusTamanho}</button>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>                
+            {boolTamanho && (dataStatusTamanho(props.statusTamanho))}
+            {dicSoma && (mediaStatusTamanho())}
+            {dicMedias && (listaFinalTamanhos())}
+            {listaPOI && (txtErrTamanho())}
             {props.errStatusTamanho && moduloStatusTamanho ? (
                 erroBanco()
             ):(<div>
@@ -676,10 +681,7 @@ function Card(props) {
                     <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
                 </div>
             ):(<div>
-            {boolTamanho && (dataStatusTamanho(props.statusTamanho))}
-            {dicSoma && (mediaStatusTamanho())}
-            {dicMedias && (listaFinalTamanhos())}
-            {listaPOI && (txtErrTamanho)}
+
             {props.statusTamanho && moduloStatusTamanho && (
                 <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around",marginTop:"10px", marginBottom:"10px"}}>
                     <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
