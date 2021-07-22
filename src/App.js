@@ -5,10 +5,11 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import https from 'https';
 import ReactLoading from "react-loading";
-
 let healthjson = require("./heatlhstatus.json");
 
 let base64 = require('base-64');
+
+
 
 function App() {
 
@@ -81,7 +82,7 @@ function App() {
                 console.log(error);
             });
 
-      function doFetch(ev){
+      function doFetch(){
             let uri = "https://www.generalshopping.iris8.com.br/api/health/status";
             
             let h = new Headers();
@@ -145,8 +146,7 @@ function App() {
   }, []);
 
   return (
-    <div style={{display:"flex", flexDirection:"column", width:"100% !important", height:"100% !important"}}>
-
+    <div style={{display:"flex", flexDirection:"column", width:"100% !important", height:"100% !important", fontFamily: 'Comfortaa, cursive'}}>
       <div style={{display:"flex", flexDirection:"row", alignItems:"center", position:"fixed", width:"100%", height:"50px", backgroundColor:"#DFE0E2",
                    boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", zIndex:"2"}}>
         <div>

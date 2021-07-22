@@ -67,19 +67,19 @@ function Card(props) {
     // Vars toogle modulos
 
     let [moduloStatusPC, setModuloStatusPC] = useState(false);
-    let [arrowStatusPC, setArrowStatusPC] = useState(">");
+    let [arrowStatusPC, setArrowStatusPC] = useState("+");
 
     let [moduloStatusHorus, setModuloStatusHorus] = useState(false);
-    let [arrowStatusHorus, setArrowStatusHorus] = useState(">");
+    let [arrowStatusHorus, setArrowStatusHorus] = useState("+");
 
     let [moduloStatusTamanho, setModuloStatusTamanho] = useState(false);
-    let [arrowStatusTamanho, setArrowStatusTamanho] = useState(">");
+    let [arrowStatusTamanho, setArrowStatusTamanho] = useState("+");
 
     let [moduloStatusCamerasPretas, setModuloStatusCamerasPretas] = useState(false);
-    let [arrowStatusCamerasPretas, setArrowStatusCamerasPretas] = useState(">");
+    let [arrowStatusCamerasPretas, setArrowStatusCamerasPretas] = useState("+");
 
     let [moduloStatusSight, setModuloStatusSight] = useState(false);
-    let [arrowStatusSight, setArrowStatusSight] = useState(">");
+    let [arrowStatusSight, setArrowStatusSight] = useState("+");
 
     function sleep (time) {
         return new Promise((resolve) => setTimeout(resolve, time));
@@ -470,11 +470,11 @@ function Card(props) {
     function switchToggleArrow(modulo, setModulo, setArrow){
         if (modulo === true){
             setModulo(false);
-            setArrow(">")
+            setArrow("+")
         }
         if (modulo === false){
             setModulo(true);
-            setArrow("v")
+            setArrow("-")
         }
     }
 
@@ -493,10 +493,14 @@ function Card(props) {
     }
 
     function dataIso2Br(dataIso){
-        let ano = dataIso.slice(0,4)
-        let mes = dataIso.slice(5,7)
-        let dia = dataIso.slice(8,10)
-        return (dia + "/" + mes + "/" + ano)
+        let data = dataIso.split("T")[0]
+        let ano = data.slice(0,4)
+        let mes = data.slice(5,7)
+        let dia = data.slice(8,10)
+
+        let tempo = dataIso.split("T")[1]
+        let tempoF = tempo.slice(0,8)
+        return (dia + "/" + mes + "/" + ano + " - " + tempoF)
     }
 
     function warnings(err){
@@ -516,7 +520,7 @@ function Card(props) {
             <ReactLoading type={"bars"} color={"black"} />
         </div>
     ):(
-    <div style={{width:"400px", backgroundColor:BG, margin:"20px", fontFamily:"Arial", padding:"10px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", display:"flex", flexDirection:"column"}}>        
+    <div style={{width:"400px", backgroundColor:BG, margin:"20px", fontFamily:"Arial", padding:"10px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", display:"flex", flexDirection:"column", fontFamily: 'Comfortaa, cursive'}}>        
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
             <h4 style={{marginTop:"5px", marginBottom:"10px"}}>{"172.18.20." + props.ip}</h4>
         </div>
@@ -534,8 +538,10 @@ function Card(props) {
                 )}
                 </div>)}
             </div>
-            <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
-                    style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusPC}</button>
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusPC}</button>
+            </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
         <div style={{display:"flex", flexDirection:"column"}}>
@@ -562,7 +568,7 @@ function Card(props) {
                         </div>
                     </div>
                 <div style={{display:"flex", flexDirection:"columns", alignItems:"center", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px"}}>
-                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusPc[0]["data"].slice(0,10))}</text>
+                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusPc[0]["data"])}</text>
                 </div>
             </div>
             ):(
@@ -582,8 +588,10 @@ function Card(props) {
                 )}
                 
         </div>
-        <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
-                style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusHorus}</button>
+        <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+            <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusHorus}</button>
+        </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
         <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
@@ -648,7 +656,7 @@ function Card(props) {
         )}</div>)}
         {moduloStatusHorus && props.statusFiles.length !== 0 && (
             <div style={{display:"flex", flexDirection:"column", alignSelf:"flex-end", justifySelf:"flex-end"}}>
-                <text style={{fontSize:"70%", marginBottom:"10px"}}>Último update: {dataIso2Br(dataMedia)}</text>
+                <text style={{fontSize:"70%", marginBottom:"10px", marginTop:"5px"}}>Último update: {dataIso2Br(dataMedia)}</text>
             </div>)}
         {props.statusFiles.length === 0 && moduloStatusHorus && (
             <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"5px"}}>
@@ -665,8 +673,10 @@ function Card(props) {
                 )}
                 
             </div>
-            <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
-                    style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusTamanho}</button>
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusTamanho}</button>
+            </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>                
             {boolTamanho && (dataStatusTamanho(props.statusTamanho))}
@@ -694,7 +704,7 @@ function Card(props) {
                         }))}
                     </div>
                     <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Tamaho (Mb)</text>
+                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Tamanho (Mb)</text>
                     {dicMedias && (listaPOI.map(u => {
                         return(
                             <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
@@ -716,8 +726,10 @@ function Card(props) {
 
         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
             <h4 style={{margin:"0px"}}>Câmeras pretas</h4>
-            <button onClick={() => switchToggleArrow(moduloStatusCamerasPretas, setModuloStatusCamerasPretas, setArrowStatusCamerasPretas)}
-                    style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusCamerasPretas}</button>
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                <button onClick={() => switchToggleArrow(moduloStatusCamerasPretas, setModuloStatusCamerasPretas, setArrowStatusCamerasPretas)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusCamerasPretas}</button>
+            </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
         {moduloStatusCamerasPretas && (
@@ -748,8 +760,10 @@ function Card(props) {
                 )}
                 
             </div>
-            <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
-                    style={{fontSize:"70%", width:"20px", height:"20px", borderRadius:"100px", borderColor:"black", marginBlock:"5px", border:"1px solid black"}}>{arrowStatusSight}</button>
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusSight}</button>
+            </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>        
         
@@ -759,6 +773,7 @@ function Card(props) {
             erroBanco()
         ):(<div>
         {props.statusSight.length !== 0 ? (
+        <div style={{display:"flex", flexDirection:"column"}}>
         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", marginTop:"10px", marginBottom:"10px"}}>
             
             <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
@@ -783,7 +798,10 @@ function Card(props) {
                 }))}
 
             </div>
-
+            </div>
+            <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"10px"}}>
+                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusSight[0]["data"])}</text>
+            </div>
         </div>):(
             <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"10px", marginTop:"10px"}}>
                 <text style={{fontSize:"90%"}}>Sem aplicativos SightCorp detectados.</text>
