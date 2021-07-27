@@ -3,12 +3,8 @@ import './App.css';
 import Card from './components/Card.js'
 import { useState, useEffect } from 'react';
 import Axios from 'axios';
-import https from 'https';
 import ReactLoading from "react-loading";
 let healthjson = require("./heatlhstatus.json");
-
-let base64 = require('base-64');
-
 
 
 function App() {
@@ -33,13 +29,10 @@ function App() {
   const basicAuth = 'Basic ' + btoa(username_ + ":" + password_);
   const base64data = basicAuth.toString('base64');
 
-  const agent = new https.Agent({  
-    rejectUnauthorized: false
-   });
 
   async function getData () {
 
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/ips', {headers})
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/ips')
             .then((response) => {
                 setIps(response["data"]);
             })
@@ -47,7 +40,7 @@ function App() {
                 console.log(error);
             });
 
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statuspc', {headers})
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statuspc')
             .then((response) => {
                 setStatusPc(response["data"]);
             })
@@ -55,7 +48,7 @@ function App() {
                 console.log(error);
             });
 
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statusfiles', {headers})
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statusfiles')
             .then((response) => {
                 setStatusFiles(response["data"]);
                 setErrStatusFiles(false);
@@ -64,7 +57,7 @@ function App() {
                 console.log(error);
             });
 
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/tamanhofiles', {headers})
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/tamanhofiles')
             .then((response) => {
               setStatusTamanho(response["data"]);
               setErrStatusTamanho(false);
@@ -72,42 +65,6 @@ function App() {
             .catch((error) => {
                 console.log(error);
             });
-
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statussightcorp', {headers})
-            .then((response) => {
-                setStatusSight(response["data"]);
-                setErrStatusSight(false);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-      function doFetch(){
-            let uri = "https://www.generalshopping.iris8.com.br/api/health/status";
-            
-            let h = new Headers();
-            h.append('Accept', 'application/json');
-            let encoded = window.btoa('faad25eb8bda40d0bffa519f56ff7b95@iris8.com.br:4fad71be-96ef-4728-abd8-ba5e50763cf9');
-            let auth = 'Basic ' + encoded;
-            h.append('Authorization', auth );
-            
-            let req = new Request(uri, {
-                method: 'GET',
-                headers: h,
-                credentials: 'include'
-            });
-            //credentials: 'same-origin'
-            
-            fetch(req)
-            .then( (response)=>{
-                  console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        }
-
-    doFetch()
   }
 
   function filterData (dic, id) {
@@ -142,6 +99,9 @@ function App() {
   useEffect(() => {
 
     getData();
+
+    console.log(statusTamanho)
+    console.log(statusSight)
 
   }, []);
 

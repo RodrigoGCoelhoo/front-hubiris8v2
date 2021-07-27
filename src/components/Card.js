@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import styles from './Card.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ReactLoading from "react-loading";
+import ReactTooltip from 'react-tooltip';
 
 function Card(props) {
 
@@ -14,12 +13,7 @@ function Card(props) {
     const VAR_MAX_TAMANHO_FILES = 0.3;
     const VAR_MAX_QUANT_ALTERACOES = 0.2;
 
-    const headers = {
-        'Content-Type': 'text/plain'
-    };
-
     const [loading, setLoading] = useState(true);
-    const [lastDataStatusFile, setLastDataStatusFile] = useState(null)
 
     // Vars computador
 
@@ -81,6 +75,57 @@ function Card(props) {
     let [moduloStatusSight, setModuloStatusSight] = useState(false);
     let [arrowStatusSight, setArrowStatusSight] = useState("+");
 
+    // Mensagens do hont
+
+    var hintComputador = `
+    Análise do estado do servidor<br /> minuto a minuto.<br /><br />
+    0 ~ 50% --> verde<br />
+    50 ~ 95% --> amarelo<br />
+    95 ~ 100% --> vermelho<br />
+    `
+
+    var hintHorus = `
+    Análise do Horus e <br />
+    seu funcionamento.
+    `
+
+    var hintWorkers = `
+    Vermelho: <br /><br />
+    - Nº diferente de Workers ativos<br /> e em operação<br />
+    - Último update > 300 seg.<br />
+    - Fila > 100 processo
+    `
+
+    var hintCaptures = `
+    Vermelho: <br /><br />
+    - Nº diferente de Captures ativos<br /> e em operação<br />
+    - Último update > 300 seg.
+    `
+
+    var hintArquivos = `
+    Vermelho:<br /><br />
+    Quantidade < 0.8 x Média<br />
+    Quantidade > 1.2 x Média
+    `
+
+    var hintTamamanho = `
+    Arquivos gerados com tamanho<br />
+    20% acima ou abaixo da média<br />
+    serão mostrados neste módulo.
+    `
+
+    var hintPretas = `
+    Câmeras com problemas de imagem<br />
+    serão mostrados neste módulo<br />
+    independentemente do tempo de problema.
+    `
+
+    var hintSight = `
+    Acompanhamento em tempo real<br />
+    do estado dos aplicativos<br />
+    da SightCorp.
+    `
+
     function sleep (time) {
         return new Promise((resolve) => setTimeout(resolve, time));
       }
@@ -103,7 +148,7 @@ function Card(props) {
         <div style={{width: widthOut + 50 + "px", height:"25px", display:"flex", flexDirection:"row", alignItems:"center", margin:"5px"}}>
             <div style={{width: widthOut + "px", height:"20px", backgroundColor:BGBAR, borderRadius:"100px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
                 <div style={{left:'10px', width:width-5, height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", justifyItems:"center"}}>
-                    <div style={{width: widthIn - 5 + "px", height:"15px", backgroundColor:color, display:"flex",borderRadius:"100px", alignSelf:"flex-start", justifySelf:"center"}}>
+                    <div style={{width: widthIn - 5 + "px", height:"15px",minWidth:"15px" ,backgroundColor:color, display:"flex",borderRadius:"100px", alignSelf:"flex-start", justifySelf:"center"}}>
 
                     </div>
                 </div>
@@ -160,12 +205,12 @@ function Card(props) {
             {seconds < 300 ? (
             <div style={{padding:"2px", paddingLeft:"4px", paddingRight:"4px", display:"flex", flexDirection:"row", alignItems:"center"}}>
                 <div style={{background:GREEN, borderRadius:"100px", width:"10px", height:"10px", marginRight:"5px", borderColor:"black"}}></div>
-                <text style={{fontSize:"80%"}}>Última atualização: {seconds} seg.</text>
+                <text style={{fontSize:"80%"}}>Último update: {seconds} seg.</text>
             </div>
             ):(
             <div style={{padding:"2px", paddingLeft:"4px", paddingRight:"4px", display:"flex", flexDirection:"row", alignItems:"center"}}>
                 <div style={{background:RED, borderRadius:"100px", width:"10px", height:"10px", marginRight:"5px"}}></div>
-                <text style={{fontSize:"80%"}}>Última atualização: {seconds} seg.</text>
+                <text style={{fontSize:"80%"}}>Último update: {seconds} seg.</text>
             </div>)}
         </div>)}
 
@@ -228,7 +273,7 @@ function Card(props) {
             let dia = dataRaw.split("-")[2]
             let dataMid = new Date(ano, mes, dia)
 
-            if (dataMid.getFullYear() != dataRecente.getFullYear() || dataMid.getMonth() != dataRecente.getMonth() || dataMid.getDate() != dataRecente.getDate()){
+            if (dataMid.getFullYear() !== dataRecente.getFullYear() || dataMid.getMonth() !== dataRecente.getMonth() || dataMid.getDate() !== dataRecente.getDate()){
 
                 somaCreated += dados[n]["created"]
                 somaDeleted += dados[n]["deleted"]
@@ -365,7 +410,7 @@ function Card(props) {
                 //console.log(dataRecente.getDate())
                 //console.log(dia)
 
-                if (ano.toString() != dataRecente.getFullYear() || mes.toString() != dataRecente.getMonth() || dia.toString() != dataRecente.getDate()){
+                if (ano.toString() !== dataRecente.getFullYear() || mes.toString() !== dataRecente.getMonth() || dia.toString() !== dataRecente.getDate()){
                     //console.log("entrou")
                     if (dicSomaTamanhos.hasOwnProperty(poi)) {
                         dicSomaTamanhos[poi] += dados[n]["mb"];
@@ -510,6 +555,18 @@ function Card(props) {
         <text style={{color:BG, fontWeight:"bolder", fontSize:"80%"}}>{err}</text>
     </div>)}
     }
+
+    function hint(msg){
+        return (
+            <div>
+                <div data-tip={msg} style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", backgroundColor:"gray", 
+                                            borderRadius:"100px", width:"15px", height:"15px", marginLeft:"10px"}}>
+                    <text style={{color:BG, fontWeight:"bolder", fontSize:"60%"}}>?</text>
+                </div>
+                <ReactTooltip place="bottom" effect="solid" multiline={true}/>
+            </div>
+        )
+    }
     
 
   return (
@@ -528,7 +585,7 @@ function Card(props) {
             <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
                 <h4 style={{margin:"0px"}}>Computador</h4>
                 {props.statusPc.length !== 0 && (
-                    <div>
+                <div>  
                 {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["cpu"], boolCPU, setBoolCPU))}
                 {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["ram"], boolRAM, setBoolRAM))}
                 {props.statusPc && (boolCountSwitchComp(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), boolArmazenamento, setBoolArmazenamento))}
@@ -538,9 +595,12 @@ function Card(props) {
                 )}
                 </div>)}
             </div>
-            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
-                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusPC}</button>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintComputador)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusPC}</button>
+                </div>
             </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
@@ -550,16 +610,16 @@ function Card(props) {
             <div>
                 <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", marginTop:"10px"}}>
                     <div style={{display:"flex", flexDirection:"column"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>CPU:</text>
+                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>CPU</text>
                         {progressBar(props.statusPc[0]["cpu"], 145)}
                     </div>
                     <div style={{display:"flex", flexDirection:"column"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>RAM:</text>
+                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>RAM</text>
                         {progressBar(props.statusPc[0]["ram"], 145)}
                     </div>
                 </div>
                     <div style={{display:"flex", flexDirection:"column", marginTop:"10px", marginBottom:"10px"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Armazenamento:</text>
+                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Armazenamento</text>
                         {progressBar(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), 350)}
                         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around", width:"90%"}}>
                             <text style={{fontSize:"75%"}}>Total: {props.statusPc[0]["totalDisk"]} Gb</text>
@@ -588,9 +648,12 @@ function Card(props) {
                 )}
                 
         </div>
-        <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-            <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
-                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusHorus}</button>
+        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+            {hint(hintHorus)}
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusHorus}</button>
+            </div>
         </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
@@ -604,14 +667,20 @@ function Card(props) {
         <div tyle={{display:"flex", flexDirection:"column", width:"100%"}}>
             <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"flex-start", justifyContent:"space-around", marginTop:"15px",}}>
                 <div style={{display:"flex", flexDirection:"column"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Workers</text>
+                    <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"5px"}}>
+                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Workers</text>
+                        {hint(hintWorkers)}
+                    </div>
                     {textHealthOperation(props.horusHealthStatus["runningWorkers"], props.horusHealthStatus["workerNumber"])}
                     {textHealthSeconds(props.horusHealthStatus["secondsFromLastWorkerHeatBeat"])}
                     {props.horusHealthStatus["workerLastReset"] && (textHealthReset(props.horusHealthStatus["workerLastReset"]))}
                     {textHealthQueue(props.horusHealthStatus["queueSize"])}
                 </div>
                 <div style={{display:"flex", flexDirection:"column", marginLeft:"20px"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Captures</text>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"5px"}}>
+                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Captures</text>
+                        {hint(hintCaptures)}
+                    </div>
                     {textHealthOperation(props.horusHealthStatus["runningCaptures"], props.horusHealthStatus["captureNumber"])}
                     {textHealthSeconds(props.horusHealthStatus["secondsFromLastCaptureHeatBeat"])}
                     {props.horusHealthStatus["captureLastReset"] && (textHealthReset(props.horusHealthStatus["captureLastReset"]))}
@@ -628,13 +697,19 @@ function Card(props) {
         ):(<div>
         {props.statusFiles && props.statusFiles.length !== 0 && moduloStatusHorus && (
         <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"center", justifyContent:"space-around"}}>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"100%"}}>
+            <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"400px"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", alignSelf:"flex-start", marginBottom:"10px",
+                             fontWeight:"bolder", marginLeft:"10px"}}>
+                    <text>Analise de arquivos</text>
+                    {hint(hintArquivos)}
+                </div>
                 {props.statusFiles && props.statusFiles !== "erro" && (boolCountSwitchHorus(props.statusFiles))}
                 {props.statusFiles && props.statusFiles !== "erro" && moduloStatusHorus && (
                     <div style={{display:"flex", flexDirection:"column", width:"100%", marginBottom:"10px"}}>
+                        
                         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", width:"100%"}}>
                             <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                                <text style={{fontWeight:"bolder", marginBottom:"5px", fontSize:"90%"}}>Modificação</text>
+                                <text style={{fontWeight:"bolder", fontSize:"90%", marginLeft:"5px"}}>Modificação</text>
                                 <text style={{fontSize:"80%"}}>Arquivos criados</text>
                                 <text style={{fontSize:"80%"}}>Arquivos apagados</text>
                             </div>
@@ -673,9 +748,12 @@ function Card(props) {
                 )}
                 
             </div>
-            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
-                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusTamanho}</button>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintTamamanho)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusTamanho}</button>
+                </div>
             </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>                
@@ -726,9 +804,12 @@ function Card(props) {
 
         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
             <h4 style={{margin:"0px"}}>Câmeras pretas</h4>
-            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                <button onClick={() => switchToggleArrow(moduloStatusCamerasPretas, setModuloStatusCamerasPretas, setArrowStatusCamerasPretas)}
-                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusCamerasPretas}</button>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintPretas)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloStatusCamerasPretas, setModuloStatusCamerasPretas, setArrowStatusCamerasPretas)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusCamerasPretas}</button>
+                </div>
             </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
@@ -760,9 +841,12 @@ function Card(props) {
                 )}
                 
             </div>
-            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
-                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusSight}</button>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintSight)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusSight}</button>
+                </div>
             </div>
         </div>
         <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>        
@@ -812,6 +896,7 @@ function Card(props) {
         )}
     </div>
     )}
+
     </div>
   );
 }
