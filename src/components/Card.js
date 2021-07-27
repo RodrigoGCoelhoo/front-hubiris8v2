@@ -410,7 +410,7 @@ function Card(props) {
                 //console.log(dataRecente.getDate())
                 //console.log(dia)
 
-                if (ano.toString() !== dataRecente.getFullYear() || mes.toString() !== dataRecente.getMonth() || dia.toString() !== dataRecente.getDate()){
+                if (ano.toString() != dataRecente.getFullYear() || mes.toString() != dataRecente.getMonth() || dia.toString() != dataRecente.getDate()){
                     //console.log("entrou")
                     if (dicSomaTamanhos.hasOwnProperty(poi)) {
                         dicSomaTamanhos[poi] += dados[n]["mb"];

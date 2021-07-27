@@ -65,6 +65,15 @@ function App() {
             .catch((error) => {
                 console.log(error);
             });
+
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statussightcorp', {headers})
+            .then((response) => {
+                setStatusSight(response["data"]);
+                setErrStatusSight(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
   }
 
   function filterData (dic, id) {
@@ -92,16 +101,13 @@ function App() {
     //console.log(shoppings);
     //console.log(statusPc);
     //console.log(statusFiles);
-    //console.log(statusTamanho);
+    console.log(statusTamanho);
     console.log(statusSight);
   }
 
   useEffect(() => {
 
     getData();
-
-    console.log(statusTamanho)
-    console.log(statusSight)
 
   }, []);
 
