@@ -15,10 +15,12 @@ function App() {
   const [statusFiles, setStatusFiles] = useState(null);
   const [statusTamanho, setStatusTamanho] = useState(null);
   const [statusSight, setStatusSight] = useState(null);
+  const [statusWindow, setStatusWindow] = useState(null);
 
   const [errStatusFiles, setErrStatusFiles] = useState(true);
   const [errStatusTamanho, setErrStatusTamanho] = useState(true);
   const [errStatusSight, setErrStatusSight] = useState(true);
+  const [errStatusWindow, setErrStatusWindow] = useState(true);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -66,10 +68,19 @@ function App() {
                 console.log(error);
             });
 
-      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statussightcorp', {headers})
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/statussightcorp')
             .then((response) => {
                 setStatusSight(response["data"]);
                 setErrStatusSight(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/wrongcapturewindow')
+            .then((response) => {
+                setStatusWindow(response["data"]);
+                setErrStatusWindow(false);
             })
             .catch((error) => {
                 console.log(error);
@@ -101,8 +112,8 @@ function App() {
     //console.log(shoppings);
     //console.log(statusPc);
     //console.log(statusFiles);
-    console.log(statusTamanho);
-    console.log(statusSight);
+    //console.log(statusTamanho);
+    console.log(statusWindow);
   }
 
   useEffect(() => {
@@ -142,6 +153,9 @@ function App() {
 
                         statusSight = {filterData(statusSight, u["id"])}
                         errStatusSight = {errStatusSight}
+
+                        statusWindow = {filterData(statusWindow, u["id"])}
+                        errStatusWindow = {errStatusWindow}
                       ></Card>
                     )})):(
                       <div style={{width:"100%", height:"100vh", backgroundColor:"gray", opacity:"50%", display:"flex", alignItems:"center", justifyContent:"center"}}>

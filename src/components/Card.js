@@ -58,6 +58,12 @@ function Card(props) {
     const [boolErrSight, setBoolErrSight] = useState(true);
     const [boolShowErrSight, setBoolShowErrSight] = useState(false);
 
+    // Var modulo Janela
+
+    const [errWindow, setErrWindow] = useState(0);
+    const [boolErrWindow, setBoolErrWindow] = useState(true);
+    const [boolShowErrWindow, setBoolShowErrWindow] = useState(false);
+
     // Vars toogle modulos
 
     let [moduloStatusPC, setModuloStatusPC] = useState(false);
@@ -74,6 +80,9 @@ function Card(props) {
 
     let [moduloStatusSight, setModuloStatusSight] = useState(false);
     let [arrowStatusSight, setArrowStatusSight] = useState("+");
+
+    let [moduloWindow, setModuloWindow] = useState(false);
+    let [arrowWindow, setArrowWindow] = useState("+");
 
     // Mensagens do hont
 
@@ -124,6 +133,12 @@ function Card(props) {
     Acompanhamento em tempo real<br />
     do estado dos aplicativos<br />
     da SightCorp.
+    `
+
+    var hintWindow = `
+    Acompanhamento de POVs que<br />
+    não estão com a configuração da<br />
+    janela de captura entre 6:00 e 23:00.
     `
 
     function sleep (time) {
@@ -510,6 +525,15 @@ function Card(props) {
         });
     }
 
+    function txtErrWindow(){
+        sleep(1000).then(() => {
+            setErrWindow(props.statusWindow.length);
+            setBoolErrWindow(false);
+            if (props.statusWindow.length > 0){
+            setBoolShowErrWindow(true);}
+        });
+    }
+
     // Functions Infra
 
     function switchToggleArrow(modulo, setModulo, setArrow){
@@ -832,7 +856,7 @@ function Card(props) {
         )}
 
         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
                 <h4 style={{margin:"0px"}}>App SightCorp</h4>
                 {props.statusSight && (boolCountSwitchSight(props.statusSight))}
                 {boolErrSight && (txtErrSight())}
@@ -887,15 +911,53 @@ function Card(props) {
                     <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusSight[0]["data"])}</text>
             </div>
         </div>):(
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"10px", marginTop:"10px"}}>
+            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"10px"}}>
                 <text style={{fontSize:"90%"}}>Sem aplicativos SightCorp detectados.</text>
             </div>
         )}
         </div>)}
         </div>
         )}
-    </div>
-    )}
+        
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                <h4 style={{margin:"0px"}}>Janela de captura</h4>
+                {boolErrWindow && (txtErrWindow())}
+                {boolShowErrWindow && (
+                    warnings(errWindow)
+                )}
+            </div>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintWindow)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloWindow, setModuloWindow, setArrowWindow)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowWindow}</button>
+                </div>
+            </div>
+        </div>
+        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>  
+        {moduloWindow && (
+        <div>
+            {props.statusWindow.length != 0 ? (
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>POVs com problema</text>
+                        {props.statusWindow.map(u => {
+                        return(
+                            <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                <text style={{fontSize:"90%"}}>{u["pov"]}</text>
+                            </div>) 
+                        })}
+                </div>
+            ):(
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                    <text style={{fontSize:"90%", marginBottom:"10px", marginTop:"10px"}}>Sem câmeras fora da janela de captura.</text>
+                </div>
+            )}
+        </div>)}
+
+
+
+    </div>)}
 
     </div>
   );
