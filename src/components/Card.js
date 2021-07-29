@@ -940,7 +940,7 @@ function Card(props) {
         <div>
             {props.statusWindow.length != 0 ? (
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>POVs com problema</text>
+                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>FORA DA JANELA DE CAPTURA</text>
                         {props.statusWindow.map(u => {
                         return(
                             <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
