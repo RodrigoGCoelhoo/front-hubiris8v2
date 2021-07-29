@@ -940,13 +940,17 @@ function Card(props) {
         <div>
             {props.statusWindow.length != 0 ? (
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>FORA DA JANELA DE CAPTURA</text>
+                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>POVs fora da janela de captura</text>
                         {props.statusWindow.map(u => {
                         return(
                             <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
                                 <text style={{fontSize:"90%"}}>{u["pov"]}</text>
                             </div>) 
                         })}
+
+                <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
+                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusWindow[0]["data"])}</text>
+                </div>
                 </div>
             ):(
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
