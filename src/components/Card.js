@@ -64,6 +64,15 @@ function Card(props) {
     const [boolErrWindow, setBoolErrWindow] = useState(true);
     const [boolShowErrWindow, setBoolShowErrWindow] = useState(false);
 
+    // Var img
+
+    const [errImg, setErrImg] = useState(0);
+    const [boolErrImg, setBoolErrImg] = useState(true);
+    const [boolShowErrImg, setBoolShowErrImg] = useState(false);
+
+    const [pretas, setPretas] = useState([])
+    const [travadas, setTravadas] = useState([])
+
     // Vars toogle modulos
 
     let [moduloStatusPC, setModuloStatusPC] = useState(false);
@@ -75,14 +84,14 @@ function Card(props) {
     let [moduloStatusTamanho, setModuloStatusTamanho] = useState(false);
     let [arrowStatusTamanho, setArrowStatusTamanho] = useState("+");
 
-    let [moduloStatusCamerasPretas, setModuloStatusCamerasPretas] = useState(false);
-    let [arrowStatusCamerasPretas, setArrowStatusCamerasPretas] = useState("+");
-
     let [moduloStatusSight, setModuloStatusSight] = useState(false);
     let [arrowStatusSight, setArrowStatusSight] = useState("+");
 
     let [moduloWindow, setModuloWindow] = useState(false);
     let [arrowWindow, setArrowWindow] = useState("+");
+
+    let [moduloImg, setModuloImg] = useState(false);
+    let [arrowModuloImg, setArrowModuloImg] = useState("+");
 
     // Mensagens do hont
 
@@ -139,6 +148,12 @@ function Card(props) {
     Acompanhamento de POVs que<br />
     não estão com a configuração da<br />
     janela de captura entre 6:00 e 23:00.
+    `
+
+    var hintImg = `
+    Acompanhamento de POVs com a<br />
+    imagem preta ou travada. Análise<br />
+    feita todos os dias as 5 da manhã.
     `
 
     function sleep (time) {
@@ -534,6 +549,15 @@ function Card(props) {
         });
     }
 
+    function txtErrImg(){
+        sleep(1000).then(() => {
+            setErrImg(props.statusImg.length);
+            setBoolErrImg(false);
+            if (props.statusImg.length > 0){
+            setBoolShowErrImg(true);}
+        });
+    }
+
     // Functions Infra
 
     function switchToggleArrow(modulo, setModulo, setArrow){
@@ -591,7 +615,6 @@ function Card(props) {
             </div>
         )
     }
-    
 
   return (
     <div>
@@ -827,35 +850,6 @@ function Card(props) {
             )}</div>)}</div>)}
 
         <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <h4 style={{margin:"0px"}}>Câmeras pretas</h4>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintPretas)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloStatusCamerasPretas, setModuloStatusCamerasPretas, setArrowStatusCamerasPretas)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusCamerasPretas}</button>
-                </div>
-            </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
-        {moduloStatusCamerasPretas && (
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", marginTop:"10px", marginBottom:"10px"}}>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>POI</text>
-                <text style={{fontSize:"90%"}}>Acesso A</text>
-                <text style={{fontSize:"90%"}}>CP Zara</text>
-                <text style={{fontSize:"90%"}}>CP JohnJohn</text>
-            </div>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Última imagem boa</text>
-                <text style={{fontSize:"90%"}}>Há 5 minutos</text>
-                <text style={{fontSize:"90%"}}>Há 2 horas</text>
-                <text style={{fontSize:"90%"}}>Há 1 hora</text>
-            </div>
-
-        </div>
-        )}
-
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
             <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
                 <h4 style={{margin:"0px"}}>App SightCorp</h4>
                 {props.statusSight && (boolCountSwitchSight(props.statusSight))}
@@ -959,6 +953,66 @@ function Card(props) {
             )}
         </div>)}
 
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                <h4 style={{margin:"0px"}}>Imagem das câmeras</h4>
+                {boolErrImg && (txtErrImg())}
+                {boolShowErrImg && (
+                    warnings(errImg)
+                )}
+            </div>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintImg)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloImg, setModuloImg, setArrowModuloImg)}
+                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowModuloImg}</button>
+                </div>
+            </div>
+        </div>
+        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div> 
+        {moduloImg && (
+        <div>
+            {props.statusImg.length > 0 ? (
+            <div style={{width:"100%", display:"flex", flexDirection:"column"}}>
+                <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
+                        {props.statusImg &&  (props.statusImg.map(u => {
+                            if (u["preta"] === 1){
+                                return(
+                                <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
+                                    <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras pretas</text>
+                                    <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                        <text style={{fontSize:"80%"}}>{u["pov"]}</text>
+                                    </div>
+                                </div>)
+                            }
+                            })
+                        )}
+                        {props.statusImg && (props.statusImg.map(u => {
+                            if (u["preta"] === 0 && u["travada"] === 1){
+                                return(
+                                <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
+                                    <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras travadas</text>
+                                    <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                        <text style={{fontSize:"80%"}}>{u["pov"]}</text>
+                                    </div>
+                                </div>)
+                            }
+                            })
+                        )}
+                    
+                </div>
+                <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
+                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusImg[0]["data"])}</text>
+                </div>
+            </div>
+            ):(
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"10px"}}>
+                    <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
+                </div>
+            )}
+        </div>
+        )}
+        
 
 
     </div>)}

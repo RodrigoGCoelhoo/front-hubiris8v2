@@ -16,11 +16,13 @@ function App() {
   const [statusTamanho, setStatusTamanho] = useState(null);
   const [statusSight, setStatusSight] = useState(null);
   const [statusWindow, setStatusWindow] = useState(null);
+  const [statusImg, setStatusImg] = useState(null);
 
   const [errStatusFiles, setErrStatusFiles] = useState(true);
   const [errStatusTamanho, setErrStatusTamanho] = useState(true);
   const [errStatusSight, setErrStatusSight] = useState(true);
   const [errStatusWindow, setErrStatusWindow] = useState(true);
+  const [errStatusImg, setErrStatusImg] = useState(true);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -81,6 +83,15 @@ function App() {
             .then((response) => {
                 setStatusWindow(response["data"]);
                 setErrStatusWindow(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+      
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/imgstatus')
+            .then((response) => {
+                setStatusImg(response["data"]);
+                setErrStatusImg(false);
             })
             .catch((error) => {
                 console.log(error);
@@ -156,6 +167,9 @@ function App() {
 
                         statusWindow = {filterData(statusWindow, u["id"])}
                         errStatusWindow = {errStatusWindow}
+
+                        statusImg = {filterData(statusImg, u["id"])}
+                        errStatusImg = {errStatusImg}
                       ></Card>
                     )})):(
                       <div style={{width:"100%", height:"100vh", backgroundColor:"gray", opacity:"50%", display:"flex", alignItems:"center", justifyContent:"center"}}>
