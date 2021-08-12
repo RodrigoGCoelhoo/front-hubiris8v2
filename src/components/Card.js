@@ -75,6 +75,9 @@ function Card(props) {
 
     // Vars toogle modulos
 
+    let [showAll, setShowAll] = useState(true);
+    let [arrowShowAll, setArrowShowAll] = useState("-");
+
     let [moduloStatusPC, setModuloStatusPC] = useState(false);
     let [arrowStatusPC, setArrowStatusPC] = useState("+");
 
@@ -624,399 +627,408 @@ function Card(props) {
             <ReactLoading type={"bars"} color={"black"} />
         </div>
     ):(
-    <div style={{width:"400px", backgroundColor:BG, margin:"20px", fontFamily:"Arial", padding:"10px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", display:"flex", flexDirection:"column", fontFamily: 'Comfortaa, cursive'}}>        
-        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-            <h4 style={{marginTop:"5px", marginBottom:"10px"}}>{"172.18.20." + props.ip}</h4>
-        </div>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>Computador</h4>
-                {props.statusPc.length !== 0 && (
-                <div>  
-                {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["cpu"], boolCPU, setBoolCPU))}
-                {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["ram"], boolRAM, setBoolRAM))}
-                {props.statusPc && (boolCountSwitchComp(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), boolArmazenamento, setBoolArmazenamento))}
-                {(boolCPU || boolRAM || boolArmazenamento) && props.statusPc && (countErrCPU())}
-                {boolShowErrComp && (
-                    warnings(errComp)
-                )}
-                </div>)}
+    <div style={{width:"400px", backgroundColor:BG, margin:"15px", fontFamily:"Arial", padding:"10px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", display:"flex", flexDirection:"column", fontFamily: 'Comfortaa, cursive'}}>        
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between", width:"100%"}}>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                <h4 style={{marginTop:"5px", marginBottom:"5px"}}>{"172.18.20." + props.ip}</h4>
             </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintComputador)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusPC}</button>
-                </div>
+            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", 
+            display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px", alignSelf:"center", justifySelf:"center"}}>
+                <button onClick={() => switchToggleArrow(showAll, setShowAll, setArrowShowAll)}
+                    style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowShowAll}</button>
             </div>
         </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
-        <div style={{display:"flex", flexDirection:"column"}}>
-            {moduloStatusPC && ( <div>
-            {props.statusPc.length !== 0 ? (
-            <div>
-                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", marginTop:"10px"}}>
-                    <div style={{display:"flex", flexDirection:"column"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>CPU</text>
-                        {progressBar(props.statusPc[0]["cpu"], 145)}
-                    </div>
-                    <div style={{display:"flex", flexDirection:"column"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>RAM</text>
-                        {progressBar(props.statusPc[0]["ram"], 145)}
+    {showAll && (
+        <div style={{marginTop:"10px"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>Computador</h4>
+                    {props.statusPc.length !== 0 && (
+                    <div>  
+                    {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["cpu"], boolCPU, setBoolCPU))}
+                    {props.statusPc && (boolCountSwitchComp(props.statusPc[0]["ram"], boolRAM, setBoolRAM))}
+                    {props.statusPc && (boolCountSwitchComp(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), boolArmazenamento, setBoolArmazenamento))}
+                    {(boolCPU || boolRAM || boolArmazenamento) && props.statusPc && (countErrCPU())}
+                    {boolShowErrComp && (
+                        warnings(errComp)
+                    )}
+                    </div>)}
+                </div>
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                    {hint(hintComputador)}
+                    <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                        <button onClick={() => switchToggleArrow(moduloStatusPC, setModuloStatusPC, setArrowStatusPC)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusPC}</button>
                     </div>
                 </div>
-                    <div style={{display:"flex", flexDirection:"column", marginTop:"10px", marginBottom:"10px"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Armazenamento</text>
-                        {progressBar(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), 350)}
-                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around", width:"90%"}}>
-                            <text style={{fontSize:"75%"}}>Total: {props.statusPc[0]["totalDisk"]} Gb</text>
-                            <text style={{fontSize:"75%"}}>Usado: {props.statusPc[0]["usedDisk"]} Gb</text>
-                            <text style={{fontSize:"75%"}}>Livre: {props.statusPc[0]["freeDisk"]} Gb</text>
+            </div>
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
+            <div style={{display:"flex", flexDirection:"column"}}>
+                {moduloStatusPC && ( <div>
+                {props.statusPc.length !== 0 ? (
+                <div>
+                    <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", marginTop:"10px"}}>
+                        <div style={{display:"flex", flexDirection:"column"}}>
+                            <text style={{fontWeight:"bolder", fontSize:"90%"}}>CPU</text>
+                            {progressBar(props.statusPc[0]["cpu"], 145)}
+                        </div>
+                        <div style={{display:"flex", flexDirection:"column"}}>
+                            <text style={{fontWeight:"bolder", fontSize:"90%"}}>RAM</text>
+                            {progressBar(props.statusPc[0]["ram"], 145)}
                         </div>
                     </div>
-                <div style={{display:"flex", flexDirection:"columns", alignItems:"center", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px"}}>
-                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusPc[0]["data"])}</text>
+                        <div style={{display:"flex", flexDirection:"column", marginTop:"10px", marginBottom:"10px"}}>
+                            <text style={{fontWeight:"bolder", fontSize:"90%"}}>Armazenamento</text>
+                            {progressBar(parseFloat(props.statusPc[0]["usedDisk"])*100/parseFloat(props.statusPc[0]["totalDisk"]), 350)}
+                            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around", width:"90%"}}>
+                                <text style={{fontSize:"75%"}}>Total: {props.statusPc[0]["totalDisk"]} Gb</text>
+                                <text style={{fontSize:"75%"}}>Usado: {props.statusPc[0]["usedDisk"]} Gb</text>
+                                <text style={{fontSize:"75%"}}>Livre: {props.statusPc[0]["freeDisk"]} Gb</text>
+                            </div>
+                        </div>
+                    <div style={{display:"flex", flexDirection:"columns", alignItems:"center", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px"}}>
+                        <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusPc[0]["data"])}</text>
+                    </div>
+                </div>
+                ):(
+                    erroBanco()
+                )}
+                </div>
+                )}
+
+            </div>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>Horus</h4>
+                    {props.horusHealthStatus && (boolCountSwitchHorus(props.horusHealthStatus))}
+                    {boolErrHorus && (txtErrHorus)}
+                    {boolShowErrHorus && (
+                        warnings(errHorus)
+                    )}
+                    
+            </div>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                {hint(hintHorus)}
+                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                    <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusHorus}</button>
                 </div>
             </div>
-            ):(
-                erroBanco()
+            </div>
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
+            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+            {props.horusHealthStatus.length === 0 && moduloStatusHorus && (
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"5px", marginTop:"10px"}}>
+                    <text style={{fontSize:"90%"}}>Este servidor não possui Horus.</text>
+                </div>
             )}
-            </div>
-            )}
-
-        </div>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>Horus</h4>
-                {props.horusHealthStatus && (boolCountSwitchHorus(props.horusHealthStatus))}
-                {boolErrHorus && (txtErrHorus)}
-                {boolShowErrHorus && (
-                    warnings(errHorus)
-                )}
-                
-        </div>
-        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-            {hint(hintHorus)}
-            <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                <button onClick={() => switchToggleArrow(moduloStatusHorus, setModuloStatusHorus, setArrowStatusHorus)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusHorus}</button>
-            </div>
-        </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-        {props.horusHealthStatus.length === 0 && moduloStatusHorus && (
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"5px", marginTop:"10px"}}>
-                <text style={{fontSize:"90%"}}>Este servidor não possui Horus.</text>
-            </div>
-        )}
-        {props.horusHealthStatus.length !== 0 && props.horusHealthStatus !== "erro" && moduloStatusHorus &&(
-        <div tyle={{display:"flex", flexDirection:"column", width:"100%"}}>
-            <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"flex-start", justifyContent:"space-around", marginTop:"15px",}}>
-                <div style={{display:"flex", flexDirection:"column"}}>
+            {props.horusHealthStatus.length !== 0 && props.horusHealthStatus !== "erro" && moduloStatusHorus &&(
+            <div tyle={{display:"flex", flexDirection:"column", width:"100%"}}>
+                <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"flex-start", justifyContent:"space-around", marginTop:"15px",}}>
+                    <div style={{display:"flex", flexDirection:"column"}}>
+                        <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"5px"}}>
+                            <text style={{fontWeight:"bolder", fontSize:"90%"}}>Workers</text>
+                            {hint(hintWorkers)}
+                        </div>
+                        {textHealthOperation(props.horusHealthStatus["runningWorkers"], props.horusHealthStatus["workerNumber"])}
+                        {textHealthSeconds(props.horusHealthStatus["secondsFromLastWorkerHeatBeat"])}
+                        {props.horusHealthStatus["workerLastReset"] && (textHealthReset(props.horusHealthStatus["workerLastReset"]))}
+                        {textHealthQueue(props.horusHealthStatus["queueSize"])}
+                    </div>
+                    <div style={{display:"flex", flexDirection:"column", marginLeft:"20px"}}>
                     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"5px"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Workers</text>
-                        {hint(hintWorkers)}
-                    </div>
-                    {textHealthOperation(props.horusHealthStatus["runningWorkers"], props.horusHealthStatus["workerNumber"])}
-                    {textHealthSeconds(props.horusHealthStatus["secondsFromLastWorkerHeatBeat"])}
-                    {props.horusHealthStatus["workerLastReset"] && (textHealthReset(props.horusHealthStatus["workerLastReset"]))}
-                    {textHealthQueue(props.horusHealthStatus["queueSize"])}
-                </div>
-                <div style={{display:"flex", flexDirection:"column", marginLeft:"20px"}}>
-                <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"5px"}}>
-                        <text style={{fontWeight:"bolder", fontSize:"90%"}}>Captures</text>
-                        {hint(hintCaptures)}
-                    </div>
-                    {textHealthOperation(props.horusHealthStatus["runningCaptures"], props.horusHealthStatus["captureNumber"])}
-                    {textHealthSeconds(props.horusHealthStatus["secondsFromLastCaptureHeatBeat"])}
-                    {props.horusHealthStatus["captureLastReset"] && (textHealthReset(props.horusHealthStatus["captureLastReset"]))}
-                </div>
-            </div>
-        </div>
-        )}
-        { moduloStatusHorus && (
-        <div style={{width:"60%", height:"2px", backgroundColor:"black", opacity:"30%", marginTop:"15px", marginBottom:"15px"}}>
-        </div>)}
-        {boolMedia && props.statusFiles.length !== 0 && (geraMediaStatusFiles(props.statusFiles))}
-        {props.errStatusFiles && moduloStatusHorus ? (
-            erroBanco()
-        ):(<div>
-        {props.statusFiles && props.statusFiles.length !== 0 && moduloStatusHorus && (
-        <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"center", justifyContent:"space-around"}}>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"400px"}}>
-                <div style={{display:"flex", flexDirection:"row", alignItems:"center", alignSelf:"flex-start", marginBottom:"10px",
-                             fontWeight:"bolder", marginLeft:"10px"}}>
-                    <text>Analise de arquivos</text>
-                    {hint(hintArquivos)}
-                </div>
-                {props.statusFiles && props.statusFiles !== "erro" && (boolCountSwitchHorus(props.statusFiles))}
-                {props.statusFiles && props.statusFiles !== "erro" && moduloStatusHorus && (
-                    <div style={{display:"flex", flexDirection:"column", width:"100%", marginBottom:"10px"}}>
-                        
-                        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", width:"100%"}}>
-                            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                                <text style={{fontWeight:"bolder", fontSize:"90%", marginLeft:"5px"}}>Modificação</text>
-                                <text style={{fontSize:"80%"}}>Arquivos criados</text>
-                                <text style={{fontSize:"80%"}}>Arquivos apagados</text>
-                            </div>
-                            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginLeft:"20px"}}>
-                                <text style={{fontWeight:"bolder", marginBottom:"2px", fontSize:"90%"}}>Quantidade</text>
-                                <text style={{fontSize:"80%"}}>{pintaMedia(nCreated, mediaCreated)}</text>
-                                <text style={{fontSize:"80%"}}>{pintaMedia(nDeleted, mediaDeleted)}</text>
-                            </div>
-                            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginLeft:"20px"}}>
-                                <text style={{fontWeight:"bolder", marginBottom:"5px", fontSize:"90%"}}>Média</text>
-                                <text style={{fontSize:"80%"}}>{mediaCreated}</text>
-                                <text style={{fontSize:"80%"}}>{mediaDeleted}</text>
-                            </div>
+                            <text style={{fontWeight:"bolder", fontSize:"90%"}}>Captures</text>
+                            {hint(hintCaptures)}
                         </div>
+                        {textHealthOperation(props.horusHealthStatus["runningCaptures"], props.horusHealthStatus["captureNumber"])}
+                        {textHealthSeconds(props.horusHealthStatus["secondsFromLastCaptureHeatBeat"])}
+                        {props.horusHealthStatus["captureLastReset"] && (textHealthReset(props.horusHealthStatus["captureLastReset"]))}
                     </div>
-                )}
-            </div>
-        </div>
-        )}</div>)}
-        {moduloStatusHorus && props.statusFiles.length !== 0 && (
-            <div style={{display:"flex", flexDirection:"column", alignSelf:"flex-end", justifySelf:"flex-end"}}>
-                <text style={{fontSize:"70%", marginBottom:"10px", marginTop:"5px"}}>Último update: {dataIso2Br(dataMedia)}</text>
-            </div>)}
-        {props.statusFiles.length === 0 && moduloStatusHorus && (
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"5px"}}>
-                <text style={{fontSize:"90%"}}>Este servidor não possui arquivos de vídeo.</text>
-            </div>
-        )}
-        </div>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>Tamanho dos arquivos</h4>
-                {boolErrTamanho && (txtErrTamanho())}
-                {boolShowErrTamanho && (
-                    warnings(errTamanho)
-                )}
-                
-            </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintTamamanho)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusTamanho}</button>
                 </div>
             </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>                
-            {boolTamanho && (dataStatusTamanho(props.statusTamanho))}
-            {dicSoma && (mediaStatusTamanho())}
-            {dicMedias && (listaFinalTamanhos())}
-            {listaPOI && (txtErrTamanho())}
-            {props.errStatusTamanho && moduloStatusTamanho ? (
+            )}
+            { moduloStatusHorus && (
+            <div style={{width:"60%", height:"2px", backgroundColor:"black", opacity:"30%", marginTop:"15px", marginBottom:"15px"}}>
+            </div>)}
+            {boolMedia && props.statusFiles.length !== 0 && (geraMediaStatusFiles(props.statusFiles))}
+            {props.errStatusFiles && moduloStatusHorus ? (
                 erroBanco()
             ):(<div>
-            {props.statusTamanho.length === 0 && moduloStatusTamanho ? (
-                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"10px", marginTop:"10px"}}>
-                    <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
-                </div>
-            ):(<div>
-
-            {props.statusTamanho && moduloStatusTamanho && (
-                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around",marginTop:"10px", marginBottom:"10px"}}>
-                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>POI</text>
-                    {dicMedias && (listaPOI.map(u => {
-                        return(
-                            <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                <text style={{fontSize:"90%"}}>{u}</text>
-                            </div>) 
-                        }))}
+            {props.statusFiles && props.statusFiles.length !== 0 && moduloStatusHorus && (
+            <div style={{display:"flex", flexDirection:"row", width:"100%", alignItems:"center", justifyContent:"space-around"}}>
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:"400px"}}>
+                    <div style={{display:"flex", flexDirection:"row", alignItems:"center", alignSelf:"flex-start", marginBottom:"10px",
+                                fontWeight:"bolder", marginLeft:"10px"}}>
+                        <text>Analise de arquivos</text>
+                        {hint(hintArquivos)}
                     </div>
-                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Tamanho (Mb)</text>
-                    {dicMedias && (listaPOI.map(u => {
-                        return(
-                            <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                <text style={{fontSize:"90%"}}>{dicAtuais[u]}</text>
-                            </div>)   
-                        }))}
-                    </div>
-                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Média</text>
-                    {dicMedias && (listaPOI.map(u => {
-                        return(
-                            <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                <text style={{fontSize:"90%"}}>{dicMedias[u]}</text>
-                            </div>)   
-                        }))}
-                    </div>
-                </div>
-            )}</div>)}</div>)}
-
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>App SightCorp</h4>
-                {props.statusSight && (boolCountSwitchSight(props.statusSight))}
-                {boolErrSight && (txtErrSight())}
-                {boolShowErrSight && (
-                    warnings(errSight)
-                )}
-                
-            </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintSight)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusSight}</button>
-                </div>
-            </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>        
-        
-        {moduloStatusSight && (
-        <div>
-        {props.errStatusSight ?(
-            erroBanco()
-        ):(<div>
-        {props.statusSight.length !== 0 ? (
-        <div style={{display:"flex", flexDirection:"column"}}>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", marginTop:"10px", marginBottom:"10px"}}>
-            
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-
-                <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>POI</text>
-               
-                {props.statusSight && (props.statusSight.map(u => {
-
-                    return (
-                        <div style={{height:"10px", padding:"5px"}}>
-                            <text style={{fontSize:"90%"}}>{u["poi"]}</text>
+                    {props.statusFiles && props.statusFiles !== "erro" && (boolCountSwitchHorus(props.statusFiles))}
+                    {props.statusFiles && props.statusFiles !== "erro" && moduloStatusHorus && (
+                        <div style={{display:"flex", flexDirection:"column", width:"100%", marginBottom:"10px"}}>
+                            
+                            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", width:"100%"}}>
+                                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                                    <text style={{fontWeight:"bolder", fontSize:"90%", marginLeft:"5px"}}>Modificação</text>
+                                    <text style={{fontSize:"80%"}}>Arquivos criados</text>
+                                    <text style={{fontSize:"80%"}}>Arquivos apagados</text>
+                                </div>
+                                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginLeft:"20px"}}>
+                                    <text style={{fontWeight:"bolder", marginBottom:"2px", fontSize:"90%"}}>Quantidade</text>
+                                    <text style={{fontSize:"80%"}}>{pintaMedia(nCreated, mediaCreated)}</text>
+                                    <text style={{fontSize:"80%"}}>{pintaMedia(nDeleted, mediaDeleted)}</text>
+                                </div>
+                                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginLeft:"20px"}}>
+                                    <text style={{fontWeight:"bolder", marginBottom:"5px", fontSize:"90%"}}>Média</text>
+                                    <text style={{fontSize:"80%"}}>{mediaCreated}</text>
+                                    <text style={{fontSize:"80%"}}>{mediaDeleted}</text>
+                                </div>
+                            </div>
                         </div>
-                    )}))}
-
-            </div>
-
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-
-                <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Estado</text>
-                {props.statusSight && (props.statusSight.map(u => {
-                    return (estadoSight(u["status"]))
-                }))}
-
-            </div>
-            </div>
-            <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"10px"}}>
-                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusSight[0]["data"])}</text>
-            </div>
-        </div>):(
-            <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"10px"}}>
-                <text style={{fontSize:"90%"}}>Sem aplicativos SightCorp detectados.</text>
-            </div>
-        )}
-        </div>)}
-        </div>
-        )}
-        
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>Janela de captura</h4>
-                {boolErrWindow && (txtErrWindow())}
-                {boolShowErrWindow && (
-                    warnings(errWindow)
-                )}
-            </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintWindow)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloWindow, setModuloWindow, setArrowWindow)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowWindow}</button>
+                    )}
                 </div>
             </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>  
-        {moduloWindow && (
-        <div>
-            {props.statusWindow.length != 0 ? (
-                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>POVs fora da janela de captura</text>
-                        {props.statusWindow.map(u => {
-                        return(
-                            <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                <text style={{fontSize:"90%"}}>{u["pov"]}</text>
-                            </div>) 
-                        })}
-
-                <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
-                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusWindow[0]["data"])}</text>
-                </div>
-                </div>
-            ):(
-                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-                    <text style={{fontSize:"90%", marginBottom:"10px", marginTop:"10px"}}>Sem câmeras fora da janela de captura.</text>
+            )}</div>)}
+            {moduloStatusHorus && props.statusFiles.length !== 0 && (
+                <div style={{display:"flex", flexDirection:"column", alignSelf:"flex-end", justifySelf:"flex-end"}}>
+                    <text style={{fontSize:"70%", marginBottom:"10px", marginTop:"5px"}}>Último update: {dataIso2Br(dataMedia)}</text>
+                </div>)}
+            {props.statusFiles.length === 0 && moduloStatusHorus && (
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"5px"}}>
+                    <text style={{fontSize:"90%"}}>Este servidor não possui arquivos de vídeo.</text>
                 </div>
             )}
-        </div>)}
-
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                <h4 style={{margin:"0px"}}>Imagem das câmeras</h4>
-                {boolErrImg && (txtErrImg())}
-                {boolShowErrImg && (
-                    warnings(errImg)
-                )}
             </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
-                {hint(hintImg)}
-                <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
-                    <button onClick={() => switchToggleArrow(moduloImg, setModuloImg, setArrowModuloImg)}
-                        style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowModuloImg}</button>
-                </div>
-            </div>
-        </div>
-        <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div> 
-        {moduloImg && (
-        <div>
-            {props.statusImg.length > 0 ? (
-            <div style={{width:"100%", display:"flex", flexDirection:"column"}}>
-                <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
-                        {props.statusImg &&  (props.statusImg.map(u => {
-                            if (u["preta"] === 1){
-                                return(
-                                <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
-                                    <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras pretas</text>
-                                    <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                        <text style={{fontSize:"80%"}}>{u["pov"]}</text>
-                                    </div>
-                                </div>)
-                            }
-                            })
-                        )}
-                        {props.statusImg && (props.statusImg.map(u => {
-                            if (u["preta"] === 0 && u["travada"] === 1){
-                                return(
-                                <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
-                                    <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras travadas</text>
-                                    <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
-                                        <text style={{fontSize:"80%"}}>{u["pov"]}</text>
-                                    </div>
-                                </div>)
-                            }
-                            })
-                        )}
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>Tamanho dos arquivos</h4>
+                    {boolErrTamanho && (txtErrTamanho())}
+                    {boolShowErrTamanho && (
+                        warnings(errTamanho)
+                    )}
                     
                 </div>
-                <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
-                    <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusImg[0]["data"])}</text>
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                    {hint(hintTamamanho)}
+                    <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                        <button onClick={() => switchToggleArrow(moduloStatusTamanho, setModuloStatusTamanho, setArrowStatusTamanho)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusTamanho}</button>
+                    </div>
                 </div>
             </div>
-            ):(
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>                
+                {boolTamanho && (dataStatusTamanho(props.statusTamanho))}
+                {dicSoma && (mediaStatusTamanho())}
+                {dicMedias && (listaFinalTamanhos())}
+                {listaPOI && (txtErrTamanho())}
+                {props.errStatusTamanho && moduloStatusTamanho ? (
+                    erroBanco()
+                ):(<div>
+                {props.statusTamanho.length === 0 && moduloStatusTamanho ? (
+                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"10px", marginTop:"10px"}}>
+                        <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
+                    </div>
+                ):(<div>
+
+                {props.statusTamanho && moduloStatusTamanho && (
+                    <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around",marginTop:"10px", marginBottom:"10px"}}>
+                        <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                        <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>POI</text>
+                        {dicMedias && (listaPOI.map(u => {
+                            return(
+                                <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                    <text style={{fontSize:"90%"}}>{u}</text>
+                                </div>) 
+                            }))}
+                        </div>
+                        <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                        <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Tamanho (Mb)</text>
+                        {dicMedias && (listaPOI.map(u => {
+                            return(
+                                <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                    <text style={{fontSize:"90%"}}>{dicAtuais[u]}</text>
+                                </div>)   
+                            }))}
+                        </div>
+                        <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                        <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"10px"}}>Média</text>
+                        {dicMedias && (listaPOI.map(u => {
+                            return(
+                                <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                    <text style={{fontSize:"90%"}}>{dicMedias[u]}</text>
+                                </div>)   
+                            }))}
+                        </div>
+                    </div>
+                )}</div>)}</div>)}
+
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>App SightCorp</h4>
+                    {props.statusSight && (boolCountSwitchSight(props.statusSight))}
+                    {boolErrSight && (txtErrSight())}
+                    {boolShowErrSight && (
+                        warnings(errSight)
+                    )}
+                    
+                </div>
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                    {hint(hintSight)}
+                    <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                        <button onClick={() => switchToggleArrow(moduloStatusSight, setModuloStatusSight, setArrowStatusSight)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowStatusSight}</button>
+                    </div>
+                </div>
+            </div>
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>        
+            
+            {moduloStatusSight && (
+            <div>
+            {props.errStatusSight ?(
+                erroBanco()
+            ):(<div>
+            {props.statusSight.length !== 0 ? (
+            <div style={{display:"flex", flexDirection:"column"}}>
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around", marginTop:"10px", marginBottom:"10px"}}>
+                
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+
+                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>POI</text>
+                
+                    {props.statusSight && (props.statusSight.map(u => {
+
+                        return (
+                            <div style={{height:"10px", padding:"5px"}}>
+                                <text style={{fontSize:"90%"}}>{u["poi"]}</text>
+                            </div>
+                        )}))}
+
+                </div>
+
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+
+                    <text style={{fontWeight:"bolder", fontSize:"90%", marginBottom:"5px"}}>Estado</text>
+                    {props.statusSight && (props.statusSight.map(u => {
+                        return (estadoSight(u["status"]))
+                    }))}
+
+                </div>
+                </div>
+                <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"10px"}}>
+                        <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusSight[0]["data"])}</text>
+                </div>
+            </div>):(
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"10px"}}>
-                    <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
+                    <text style={{fontSize:"90%"}}>Sem aplicativos SightCorp detectados.</text>
                 </div>
             )}
-        </div>
-        )}
-        
+            </div>)}
+            </div>
+            )}
+            
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>Janela de captura</h4>
+                    {boolErrWindow && (txtErrWindow())}
+                    {boolShowErrWindow && (
+                        warnings(errWindow)
+                    )}
+                </div>
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                    {hint(hintWindow)}
+                    <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                        <button onClick={() => switchToggleArrow(moduloWindow, setModuloWindow, setArrowWindow)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowWindow}</button>
+                    </div>
+                </div>
+            </div>
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div>  
+            {moduloWindow && (
+            <div>
+                {props.statusWindow.length != 0 ? (
+                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                        <text style={{fontWeight:"bolder", marginBottom:"10px", marginTop:"10px"}}>POVs fora da janela de captura</text>
+                            {props.statusWindow.map(u => {
+                            return(
+                                <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                    <text style={{fontSize:"90%"}}>{u["pov"]}</text>
+                                </div>) 
+                            })}
+
+                    <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
+                        <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusWindow[0]["data"])}</text>
+                    </div>
+                    </div>
+                ):(
+                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                        <text style={{fontSize:"90%", marginBottom:"10px", marginTop:"10px"}}>Sem câmeras fora da janela de captura.</text>
+                    </div>
+                )}
+            </div>)}
+
+            <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <h4 style={{margin:"0px"}}>Imagem das câmeras</h4>
+                    {boolErrImg && (txtErrImg())}
+                    {boolShowErrImg && (
+                        warnings(errImg)
+                    )}
+                </div>
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"60px"}}>
+                    {hint(hintImg)}
+                    <div style={{width:"20px", maxWidth:"20px", height:"20px", maxHeight:"20px", borderRadius:"100px", borderColor:"black", border:"1px solid black", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"2px"}}>
+                        <button onClick={() => switchToggleArrow(moduloImg, setModuloImg, setArrowModuloImg)}
+                            style={{fontSize:"110%", border:"0px", backgroundColor:"transparent"}}>{arrowModuloImg}</button>
+                    </div>
+                </div>
+            </div>
+            <div style={{height:"2px", width:"100%", borderColor:"black", backgroundColor:"black", opacity:"50%", marginBottom:"10px"}}></div> 
+            {moduloImg && (
+            <div>
+                {props.statusImg.length > 0 ? (
+                <div style={{width:"100%", display:"flex", flexDirection:"column"}}>
+                    <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
+                            {props.statusImg &&  (props.statusImg.map(u => {
+                                if (u["preta"] === 1){
+                                    return(
+                                    <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
+                                        <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras pretas</text>
+                                        <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                            <text style={{fontSize:"80%"}}>{u["pov"]}</text>
+                                        </div>
+                                    </div>)
+                                }
+                                })
+                            )}
+                            {props.statusImg && (props.statusImg.map(u => {
+                                if (u["preta"] === 0 && u["travada"] === 1){
+                                    return(
+                                    <div style={{width:"50%", display:"flex", flexDirection:"column", alignItems:"center", marginTop:"5px"}}>
+                                        <text style={{fontSize:"90%", fontWeight:"bolder", marginBottom:"5px"}}>Câmeras travadas</text>
+                                        <div style={{padding:"1px", paddingLeft:"4px", paddingRight:"4px"}}>
+                                            <text style={{fontSize:"80%"}}>{u["pov"]}</text>
+                                        </div>
+                                    </div>)
+                                }
+                                })
+                            )}
+                        
+                    </div>
+                    <div style={{display:"flex", flexDirection:"columns", alignItems:"flex-end", justifyContent:"flex-end", marginBottom:"10px", marginTop:"15px", alignSelf:"flex-end"}}>
+                        <text style={{fontSize:"65%"}}>Último update: {dataIso2Br(props.statusImg[0]["data"])}</text>
+                    </div>
+                </div>
+                ):(
+                    <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginBottom:"15px", marginTop:"10px"}}>
+                        <text style={{fontSize:"90%"}}>Sem câmeras com defeito.</text>
+                    </div>
+                )}
+            </div>
+            )}
+            
 
 
+        </div>)}
     </div>)}
-
     </div>
   );
 }

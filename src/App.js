@@ -17,12 +17,14 @@ function App() {
   const [statusSight, setStatusSight] = useState(null);
   const [statusWindow, setStatusWindow] = useState(null);
   const [statusImg, setStatusImg] = useState(null);
+  const [healthHorus, setHealthHorus] = useState(null);
 
   const [errStatusFiles, setErrStatusFiles] = useState(true);
   const [errStatusTamanho, setErrStatusTamanho] = useState(true);
   const [errStatusSight, setErrStatusSight] = useState(true);
   const [errStatusWindow, setErrStatusWindow] = useState(true);
   const [errStatusImg, setErrStatusImg] = useState(true);
+  const [errHealthHorus, setErrHealthHorus] = useState(true);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -96,6 +98,15 @@ function App() {
             .catch((error) => {
                 console.log(error);
             });
+
+      Axios.get('https://hubiris8-back.herokuapp.com/hubapi/healthHorus')
+            .then((response) => {
+                setHealthHorus(response["data"]);
+                setErrHealthHorus(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
   }
 
   function filterData (dic, id) {
@@ -110,9 +121,9 @@ function App() {
 
   function filterDataAPI (id){
     
-    for (let u in statusHorus){
-      if (statusHorus[u]["ip"].split(".")[3] === id.toString()){
-        return statusHorus[u];
+    for (let u in healthHorus){
+      if (healthHorus[u]["ip"].split(".")[3] === id.toString()){
+        return healthHorus[u];
       }
     }
     return [];
@@ -135,49 +146,49 @@ function App() {
 
   return (
     <div style={{display:"flex", flexDirection:"column", width:"100% !important", height:"100% !important", fontFamily: 'Comfortaa, cursive'}}>
-      <div style={{display:"flex", flexDirection:"row", alignItems:"center", position:"fixed", width:"100%", height:"50px", backgroundColor:"#DFE0E2",
-                   boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", zIndex:"2"}}>
-        <div>
-          <h2 style={{position:"relative", left:"15px", top:"0", fontSize:"15px"}}>Central de monitoramento</h2>
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", position:"fixed", width:"100%", height:"50px", backgroundColor:"#DFE0E2",
+                    boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", zIndex:"2"}}>
+            <div>
+            <h2 style={{position:"relative", left:"15px", top:"0", fontSize:"15px"}}>Central de monitoramento</h2>
+            </div>
+            <div style={{position:"fixed", right:"0"}}>
+            <img src={logo} style={{height:"38px", marginTop:"1px", marginRight:"0.5vh"}}/>
+            </div>
         </div>
-        <div style={{position:"fixed", right:"0"}}>
-          <img src={logo} style={{height:"38px", marginTop:"1px", marginRight:"0.5vh"}}/>
+        <div style={{width:"100%", height:"50px"}}></div>
+        <div style={{position:"relative", display:"flex", flexDirection:"row", flexFlow:"row wrap", width:"100%", marginTop:"10px"}}>
+            
+        {ips ? (ips.map(u => {
+                        return (
+                        <Card 
+                            ip = {u["id"]}
+                            statusPc = {filterData(statusPc, u["id"])}
+                    
+                            horusHealthStatus = {filterDataAPI(u["id"])}
+                            errHorusHealthStatus = {errHealthHorus}
+
+                            statusFiles = {filterData(statusFiles, u["id"])}
+                            errStatusFiles = {errStatusFiles}
+
+                            statusTamanho = {filterData(statusTamanho, u["id"])}
+                            errStatusTamanho = {errStatusTamanho}
+
+                            statusSight = {filterData(statusSight, u["id"])}
+                            errStatusSight = {errStatusSight}
+
+                            statusWindow = {filterData(statusWindow, u["id"])}
+                            errStatusWindow = {errStatusWindow}
+
+                            statusImg = {filterData(statusImg, u["id"])}
+                            errStatusImg = {errStatusImg}
+                        ></Card>
+                        )})):(
+                        <div style={{width:"100%", height:"100vh", backgroundColor:"gray", opacity:"50%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+                            <ReactLoading type={"spin"} color={"black"} />
+                        </div>
+                        )}
+
         </div>
-      </div>
-      <div style={{width:"100%", height:"50px"}}></div>
-      <div style={{position:"relative", display:"flex", flexDirection:"row", flexFlow:"row wrap", width:"100%"}}>
-        
-      {ips ? (ips.map(u => {
-                    return (
-                      <Card 
-                        ip = {u["id"]}
-                        statusPc = {filterData(statusPc, u["id"])}
-                  
-                        horusHealthStatus = {filterDataAPI(u["id"])}
-                        errHorusHealthStatus = {false}
-
-                        statusFiles = {filterData(statusFiles, u["id"])}
-                        errStatusFiles = {errStatusFiles}
-
-                        statusTamanho = {filterData(statusTamanho, u["id"])}
-                        errStatusTamanho = {errStatusTamanho}
-
-                        statusSight = {filterData(statusSight, u["id"])}
-                        errStatusSight = {errStatusSight}
-
-                        statusWindow = {filterData(statusWindow, u["id"])}
-                        errStatusWindow = {errStatusWindow}
-
-                        statusImg = {filterData(statusImg, u["id"])}
-                        errStatusImg = {errStatusImg}
-                      ></Card>
-                    )})):(
-                      <div style={{width:"100%", height:"100vh", backgroundColor:"gray", opacity:"50%", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                          <ReactLoading type={"spin"} color={"black"} />
-                      </div>
-                    )}
-
-      </div>
     </div>
   );
 }
